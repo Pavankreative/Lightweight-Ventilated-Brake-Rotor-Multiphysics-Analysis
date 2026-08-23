@@ -1,4 +1,4 @@
-#**Design and Multiphysics Simulation of a Lightweight Ventilated Brake Rotor for Electric Vehicles**
+#**Design and Multiphysics Simulation of a Lightweight Ventilated Brake Rotor for Electric Vehicles**#
 
 This repository documents the complete development of an engineering CAE project focused on the design and multiphysics simulation of a lightweight ventilated brake rotor for electric vehicles.
 
