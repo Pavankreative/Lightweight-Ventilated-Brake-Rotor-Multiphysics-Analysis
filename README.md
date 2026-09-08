@@ -966,354 +966,280 @@ The applied surface heat flux and the resulting Total Heat Flux should not be co
 | --- | --- |
 | Applied Heat Flux | Prescribed thermal boundary condition |
 | Total Heat Flux | Resulting heat-flow field associated with thermal gradients in the solved model |
+## 17. Static Structural Analysis
 
-## 17. Key Results Summary
+A standalone static structural analysis was performed to evaluate the mechanical response of the brake rotor under the equivalent braking torque generated during the severe braking condition.
 
-The current project includes a completed transient thermal baseline analysis and a completed standalone static structural baseline analysis.
+The structural analysis was performed independently from the transient thermal analysis. The thermal temperature field was not transferred into the structural model. Therefore, the results in this section represent a **mechanical-only static structural baseline**, not a fully coupled thermo-structural analysis.
 
-### 17.1 Thermal Analysis Results
+### 17.1 Structural Analysis Objective
 
-The transient thermal analysis was performed using the defined braking heat-flux profile and convection boundary condition.
+The objectives of the static structural analysis were:
 
-| Parameter | Result |
-|---|---:|
-| Initial / Ambient Temperature | 22°C |
-| Peak Rotor Temperature | ≈ 52°C |
-| Peak Temperature Time | ≈ 1.94 s |
-| Temperature at 10 s | 33.117°C |
-| Temperature at 30 s | 28.161°C |
-| Temperature at 60 s | 26.512°C |
-| Maximum Total Heat Flux Result | 2546.6 W/m² |
-| Applied Peak Heat Flux per Friction Face | 275,000 W/m² |
-| Applied Average Heat Flux per Friction Face | 137,500 W/m² |
-| Braking Duration | 4 s |
-| Total Rotor Thermal Input | ≈ 30.33 kJ |
-| Average Thermal Power | ≈ 7.58 kW |
+- Evaluate the deformation of the rotor under the equivalent braking torque.
+- Determine the resulting von-Mises stress distribution.
+- Determine the maximum and minimum principal stresses.
+- Evaluate the equivalent elastic strain.
+- Verify that the rotor geometry provides sufficient stiffness under the defined braking load.
+- Establish a structural baseline for future thermo-structural and optimization studies.
 
-The predicted peak rotor temperature is approximately 52°C, occurring at approximately 1.94 s into the braking event.
+### 17.2 Structural Model Definition
 
-After the braking heat input ends at 4 s, the rotor temperature decreases continuously due to the applied convection boundary condition.
-
-The thermal results indicate that the simplified baseline model does not produce an excessive temperature rise under the defined braking case.
-
-### 17.2 Static Structural Analysis Results
-
-A standalone Static Structural analysis was subsequently performed using the same rotor geometry.
-
-The structural analysis represents the braking torque mechanically. The thermal temperature field was **not transferred into the structural model**, so these results should be interpreted as a mechanical-only structural baseline.
-
-#### Structural Model
+The static structural analysis was developed in ANSYS Workbench using the same brake rotor geometry created during the thermal analysis.
 
 | Parameter | Value |
 |---|---:|
-| Analysis Type | Static Structural |
+| Analysis type | Static Structural |
+| Solver | ANSYS Mechanical |
 | Material | Structural Steel |
-| Mesh Element Size | 9 mm |
-| Mesh Nodes | 114,520 |
-| Mesh Elements | 75,119 |
-| Fixed Support | Six mounting-hole cylindrical faces |
-| Applied Braking Moment | 228 N·m |
-| Moment Axis | Global Z axis |
-| Total Braking Force Equivalent | ≈ 2,303 N |
-| Per-Face Equivalent Force | ≈ 1,152 N |
+| Rotor outer diameter | 240 mm |
+| Friction track inner diameter | 150 mm |
+| Central bore | 70 mm |
+| Mounting PCD | 100 mm |
+| Number of mounting holes | 6 |
+| Mounting hole diameter | 8 mm |
+| Total rotor thickness | 12 mm |
+| Number of ventilation vanes | 24 |
+| Vane thickness | 2 mm |
+| Applied braking moment | 228 N·m |
 
-The six cylindrical mounting-hole faces were fixed to represent the rotor attachment to the wheel/hub assembly.
+### 17.3 Material Definition
 
-A braking moment of 228 N·m was applied to the annular friction region of the rotor.
+Structural Steel was assigned to the rotor in the Static Structural analysis.
 
-### 17.3 Static Structural Results
+The material definition was used consistently throughout the structural model so that the calculated deformation, stress and strain fields could be evaluated using the same material representation.
 
-| Result | Maximum Value |
+The current structural analysis is intended as a baseline engineering study. A future version can incorporate a temperature-dependent material model when the thermo-structural coupling is completed.
+
+### 17.4 Structural Mesh
+
+A mesh-convergence and computational-limit iteration was performed to obtain a mesh that remained within the ANSYS Student computational constraints while providing sufficient geometric representation.
+
+The final structural mesh used a nominal element size of **9 mm**.
+
+| Mesh Parameter | Final Value |
 |---|---:|
-| Total Deformation | 9.1413 × 10⁻⁷ m |
-| Total Deformation | ≈ 0.000914 mm |
-| Equivalent (von-Mises) Stress | 3.1347 × 10⁶ Pa |
-| Equivalent (von-Mises) Stress | ≈ 3.135 MPa |
-| Maximum Principal Stress | 1.9152 × 10⁶ Pa |
-| Maximum Principal Stress | ≈ 1.915 MPa |
-| Minimum Principal Stress | ≈ -2.545 MPa |
-| Equivalent Elastic Strain | ≈ 1.677 × 10⁻⁵ |
+| Element size | 9 mm |
+| Nodes | 114,520 |
+| Elements | 75,119 |
+| Analysis status | Successfully solved |
 
-### 17.4 Structural Interpretation
+Earlier mesh iterations exceeded the available ANSYS Student computational limit:
 
-The static structural solution produced very small deformation under the applied 228 N·m braking moment.
+| Element Size | Nodes | Elements | Result |
+|---|---:|---:|---|
+| 5 mm | 274,776 | 182,590 | Exceeded computational limit |
+| 8 mm | 130,742 | 85,990 | Exceeded 128k-node limit |
+| 9 mm | 114,520 | 75,119 | Accepted and solved |
 
-The maximum total deformation was approximately:
+The 9 mm mesh was therefore selected as the final baseline structural mesh.
 
-**9.1413 × 10⁻⁷ m ≈ 0.000914 mm**
+### 17.5 Boundary Conditions
 
-The maximum equivalent von-Mises stress was approximately:
+The rotor was constrained at the six mounting locations.
+
+A **Fixed Support** was applied to the cylindrical faces of the six mounting holes. These regions represent the mechanical attachment of the rotor to the wheel or hub assembly.
+
+The constraint prevents rigid-body motion while allowing the structural solver to evaluate the deformation and stress response generated by the braking torque.
+
+### 17.6 Applied Braking Moment
+
+The equivalent braking torque obtained from the severe braking condition was applied to the annular friction region of the rotor.
+
+The applied moment was:
+
+**228 N·m**
+
+The moment was defined using the ANSYS Mechanical moment load with the rotational axis aligned with the rotor's central axis.
+
+The corresponding equivalent tangential force is:
+
+\[
+F_t = \frac{T}{r_{\mathrm{eff}}}
+\]
+
+where:
+
+- \(T = 228\) N·m
+- \(r_{\mathrm{eff}} \approx 0.099\) m
+
+Therefore:
+
+\[
+F_t \approx 2303\ \mathrm{N}
+\]
+
+For the two friction faces, the equivalent load representation corresponds approximately to:
+
+\[
+F_{\mathrm{face}} \approx 1152\ \mathrm{N}
+\]
+
+per friction face.
+
+The moment representation was used directly in the structural model rather than explicitly applying individual friction forces.
+
+### 17.7 Structural Result Set
+
+The following structural result quantities were evaluated:
+
+1. Total Deformation
+2. Equivalent (von-Mises) Stress
+3. Maximum Principal Stress
+4. Equivalent Elastic Strain
+
+The results represent the response of the rotor to the applied 228 N·m braking moment with the six mounting-hole cylindrical faces constrained.
+
+---
+
+### 17.8 Total Deformation
+
+The maximum total deformation obtained from the static structural analysis was:
+
+**9.1413 × 10⁻⁷ m**
+
+Equivalent value:
+
+**0.000914 mm**
+
+| Result | Maximum |
+|---|---:|
+| Total deformation | 9.1413 × 10⁻⁷ m |
+| Total deformation | 0.000914 mm |
+
+The calculated deformation is very small relative to the overall rotor dimensions.
+
+This indicates that the rotor exhibits high structural stiffness under the applied static braking torque for the current material, geometry, loading and boundary-condition assumptions.
+
+---
+
+### 17.9 Equivalent (von-Mises) Stress
+
+The maximum equivalent von-Mises stress obtained was:
+
+**3.1347 × 10⁶ Pa**
+
+Equivalent value:
 
 **3.135 MPa**
 
-The maximum principal stress was approximately:
+| Result | Maximum |
+|---|---:|
+| Equivalent stress | 3.1347 × 10⁶ Pa |
+| Equivalent stress | 3.135 MPa |
+
+The maximum stress is localized within the mechanically loaded rotor structure according to the ANSYS result contour.
+
+The calculated value is relatively low for Structural Steel. However, this result should be interpreted as a baseline static mechanical response rather than a complete brake durability assessment.
+
+---
+
+### 17.10 Maximum Principal Stress
+
+The maximum principal stress obtained from the analysis was:
+
+**1.9152 × 10⁶ Pa**
+
+Equivalent value:
 
 **1.915 MPa**
 
-The minimum principal stress was approximately:
+| Result | Maximum |
+|---|---:|
+| Maximum principal stress | 1.9152 × 10⁶ Pa |
+
+The maximum principal stress provides an additional view of the tensile stress state within the rotor and complements the von-Mises stress evaluation.
+
+---
+
+### 17.11 Minimum Principal Stress
+
+The minimum principal stress obtained was approximately:
 
 **-2.545 MPa**
 
-The maximum equivalent elastic strain was approximately:
+The negative value indicates a compressive principal stress state in portions of the rotor.
+
+| Result | Value |
+|---|---:|
+| Minimum principal stress | ≈ -2.545 MPa |
+
+The combination of positive and negative principal stresses indicates that the rotor experiences both tensile and compressive mechanical stress regions under the applied braking torque.
+
+---
+
+### 17.12 Equivalent Elastic Strain
+
+The maximum equivalent elastic strain obtained was approximately:
 
 **1.677 × 10⁻⁵**
 
-These results indicate that the rotor geometry remains mechanically stiff under the defined baseline braking torque in the standalone static structural model.
+| Result | Maximum |
+|---|---:|
+| Equivalent elastic strain | ≈ 1.677 × 10⁻⁵ |
 
-### 17.5 Important Coupling Limitation
-
-The current Static Structural analysis is a **standalone mechanical analysis**.
-
-The transient thermal temperature field was not successfully transferred into the Static Structural model. Therefore:
-
-- Thermal expansion is not included.
-- Temperature-dependent material properties are not included.
-- Thermal stress is not included.
-- Thermo-mechanical coupling is not included.
-- The reported structural stresses are mechanical-only baseline results.
-
-Therefore, the structural results should not be described as thermo-structural results.
-
-The completed analyses currently represent:
-
-**Transient Thermal Baseline + Static Structural Baseline**
-
-rather than a fully coupled thermo-structural simulation.
-
-### 17.6 Combined Project Results
-
-| Category | Result | Status |
-|---|---|---|
-| Rotor Geometry | Lightweight ventilated rotor | Completed |
-| Braking Case | 80 km/h to 0 km/h in 4 s | Defined |
-| Total Vehicle + Rider Mass | 195 kg | Defined |
-| Front Brake Distribution | 70% | Defined |
-| Braking Torque | 228 N·m | Defined |
-| Rotor Thermal Input | ≈ 30.33 kJ | Defined |
-| Peak Applied Heat Flux | 275,000 W/m² per face | Defined |
-| Transient Thermal Analysis | Completed baseline | Completed |
-| Peak Thermal Temperature | ≈ 52°C | Completed |
-| Static Structural Analysis | Completed baseline | Completed |
-| Maximum von-Mises Stress | ≈ 3.135 MPa | Completed |
-| Maximum Total Deformation | ≈ 0.000914 mm | Completed |
-| Thermo-Structural Coupling | Temperature field transfer | Not completed |
-| Modal Analysis | Natural frequency evaluation | Planned |
-| Optimization | Weight / thermal / structural optimization | Planned |
-
-### 17.7 Current Engineering Conclusion
-
-The current simulation results provide two independent baseline evaluations of the proposed ventilated brake rotor.
-
-The transient thermal analysis predicts a peak rotor temperature of approximately 52°C under the defined severe braking event, followed by cooling after the 4 s braking period.
-
-The standalone static structural analysis predicts approximately 3.135 MPa maximum equivalent von-Mises stress and approximately 0.000914 mm maximum deformation under the 228 N·m braking moment.
-
-Together, these results provide an initial thermal and mechanical assessment of the rotor design.
-
-However, the structural results do not yet include thermal stresses because the thermal field was not successfully transferred into the Static Structural analysis.
-
-The next major simulation stage is therefore a fully coupled thermo-structural analysis, followed by modal analysis and design optimization.
+The small elastic strain is consistent with the low calculated stress and deformation levels obtained from the structural solution.
 
 ---
 
-## 18. Project Status
+### 17.13 Static Structural Results Summary
 
-### Completed
+| Structural Result | Maximum / Value |
+|---|---:|
+| Applied braking moment | 228 N·m |
+| Total deformation | 9.1413 × 10⁻⁷ m |
+| Total deformation | 0.000914 mm |
+| Equivalent von-Mises stress | 3.135 MPa |
+| Maximum principal stress | 1.915 MPa |
+| Minimum principal stress | ≈ -2.545 MPa |
+| Equivalent elastic strain | ≈ 1.677 × 10⁻⁵ |
+| Structural mesh nodes | 114,520 |
+| Structural mesh elements | 75,119 |
 
-- [x] Engineering problem definition
-- [x] Vehicle and braking load calculations
-- [x] Rotor thermal energy calculation
-- [x] Braking torque calculation
-- [x] Rotor geometry development
-- [x] Ventilated rotor concept development
-- [x] SpaceClaim geometry preparation
-- [x] Transient thermal model setup
-- [x] Transient thermal simulation
-- [x] Thermal temperature probe extraction
-- [x] Thermal contour evaluation
-- [x] Static Structural model setup
-- [x] Structural material assignment
-- [x] Structural mesh development
-- [x] Mounting-hole fixed support definition
-- [x] 228 N·m braking moment application
-- [x] Static Structural solution
-- [x] Total deformation evaluation
-- [x] Equivalent von-Mises stress evaluation
-- [x] Principal stress evaluation
-- [x] Equivalent elastic strain evaluation
+### 17.14 Structural Interpretation
 
-### In Progress / Remaining
+The static structural solution indicates that the proposed rotor geometry has a low mechanical deformation response under the defined severe-braking torque.
 
-- [ ] Thermo-structural temperature-field transfer
-- [ ] Coupled thermal-stress analysis
-- [ ] Modal analysis
-- [ ] Thermal-structural design optimization
-- [ ] Final design comparison
-- [ ] Final engineering report
+The maximum calculated deformation is approximately **0.000914 mm**, which is very small compared with the 240 mm rotor diameter.
 
----
+The maximum von-Mises stress is approximately **3.135 MPa**, while the maximum principal stress is approximately **1.915 MPa**.
 
-## 19. Limitations of the Current Analysis
+These results indicate that the rotor has a substantial mechanical stiffness margin under the current idealized loading and constraint conditions.
 
-The current results should be interpreted within the scope of the implemented baseline models.
+However, these values should not be interpreted as a complete structural safety certification because the current model does not include several effects that can influence an actual brake rotor, including:
 
-### Thermal Model Limitations
-
-The transient thermal model uses a simplified prescribed heat-flux boundary condition.
-
-The model does not currently include:
-
-- Moving heat-source treatment
-- Explicit rotor rotation
-- Detailed brake pad contact mechanics
-- Full CFD-based airflow analysis
-- Internal ventilation-channel convection
-- Radiation heat transfer
-- Hub thermal sink
 - Temperature-dependent material properties
-- Detailed contact resistance between components
-
-The model is therefore intended as a baseline transient thermal assessment rather than a complete brake-system thermal simulation.
-
-### Structural Model Limitations
-
-The Static Structural model is a standalone mechanical analysis.
-
-It does not currently include:
-
 - Thermal expansion
-- Temperature-dependent elastic properties
 - Thermally induced stress
-- Fully coupled thermo-mechanical loading
-- Detailed pad pressure distribution
-- Contact nonlinearities
+- Temperature gradients through the rotor thickness
+- Contact interaction with brake pads
+- Pad pressure distribution
+- Frictional contact behavior
+- Rotor rotation
+- Hub and wheel flexibility
 - Bolt preload
-- Hub deformation
-- Wheel-hub interface compliance
+- Manufacturing tolerances
+- Local geometric stress concentrations requiring mesh refinement
 - Fatigue loading
-- Rotational dynamics
+- Cyclic thermal loading
 
-The structural results should therefore be treated as baseline mechanical results.
-
----
-
-## 20. Future Multiphysics Development
-
-The next stage of the project is to develop a more complete multiphysics workflow.
-
-### 20.1 Thermo-Structural Coupling
-
-The transient temperature field will be transferred to the structural model to evaluate:
-
-- Thermal expansion
-- Thermal stress
-- Combined mechanical and thermal stress
-- Temperature-dependent material response
-- Thermally induced deformation
-
-The objective is to determine the combined structural response of the rotor under simultaneous braking torque and thermal loading.
-
-### 20.2 Modal Analysis
-
-A modal analysis will be performed to determine:
-
-- Natural frequencies
-- Mode shapes
-- Potential vibration-sensitive modes
-- Structural dynamic characteristics
-
-The modal results can subsequently be compared against expected excitation sources associated with rotor rotation and braking.
-
-### 20.3 Design Optimization
-
-Future optimization will investigate the influence of:
-
-- Rotor thickness
-- Vane geometry
-- Vane count
-- Ventilation gap
-- Friction-track dimensions
-- Mounting-hole configuration
-- Rotor mass
-- Thermal response
-- Structural stiffness
-
-The optimization objective will be to reduce mass while maintaining acceptable thermal and structural performance.
+Therefore, the present result is best classified as a **Static Structural Baseline**.
 
 ---
 
-## 21. Engineering Significance
+## 18. Thermo-Structural Coupling Status
 
-This project demonstrates a structured CAE workflow for evaluating a lightweight ventilated brake rotor for an electric-vehicle application.
+A thermo-structural coupling workflow was investigated after completing the independent transient thermal and static structural analyses.
 
-The current work combines:
+The intended workflow was:
 
-- Engineering load calculations
-- Brake-energy estimation
-- Heat-transfer calculations
-- CAD development
-- Transient thermal simulation
-- Static structural simulation
-- Stress and deformation evaluation
-- CAE result interpretation
-
-The analysis also demonstrates the importance of distinguishing between independent physics simulations and genuinely coupled multiphysics simulations.
-
-The present results establish a baseline from which thermo-structural coupling, modal analysis, and optimization can be developed.
-
----
-
-## 22. Reproducibility
-
-The project calculations and simulation assumptions are documented so that the analysis can be reproduced and further developed.
-
-### Primary Design Inputs
-
-- Vehicle mass = 120 kg
-- Rider mass = 75 kg
-- Total mass = 195 kg
-- Initial speed = 80 km/h
-- Final speed = 0 km/h
-- Braking duration = 4 s
-- Wheel radius = 0.30 m
-- Front braking distribution = 70%
-- Rotor heat partition = 90%
-- Effective friction radius ≈ 0.099 m
-- Braking torque ≈ 228 N·m
-
-### Thermal Inputs
-
-- Initial temperature = 22°C
-- Ambient temperature = 22°C
-- Peak heat flux per friction face = 275,000 W/m²
-- Heat input duration = 4 s
-- Convection-based cooling after braking
-
-### Structural Inputs
-
-- Material = Structural Steel
-- Braking moment = 228 N·m
-- Fixed support = six mounting-hole cylindrical faces
-- Mesh size = 9 mm
-- Nodes = 114,520
-- Elements = 75,119
-
----
-
-## 23. Final Statement
-
-This repository documents the development and baseline CAE evaluation of a lightweight ventilated brake rotor intended for electric-vehicle applications.
-
-The current project has progressed beyond the initial design stage and includes both transient thermal and static structural simulation results.
-
-The transient thermal analysis produced a peak rotor temperature of approximately 52°C for the defined braking event.
-
-The standalone static structural analysis produced a maximum equivalent von-Mises stress of approximately 3.135 MPa and a maximum total deformation of approximately 0.000914 mm under the defined 228 N·m braking moment.
-
-These results provide an initial assessment of the rotor's thermal and mechanical response.
-
-The current structural analysis is intentionally reported as a standalone mechanical baseline because the thermal temperature field has not yet been successfully transferred into the structural model.
-
-Future development will focus on completing the thermo-structural coupling, followed by modal analysis and design optimization.
-
-The overall objective is to establish a reproducible CAE workflow for the design, simulation, evaluation, and optimization of lightweight ventilated brake rotors for electric-vehicle applications.
+```text
+Transient Thermal
+       |
+       | Temperature Field
+       v
+Static Structural
+       |
+       v
+Thermo-Structural Stress / Deformation
+oducible CAE workflow for the design, simulation, evaluation, and optimization of lightweight ventilated brake rotors for electric-vehicle applications.
