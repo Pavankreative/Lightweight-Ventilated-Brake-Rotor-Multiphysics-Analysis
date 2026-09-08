@@ -969,214 +969,351 @@ The applied surface heat flux and the resulting Total Heat Flux should not be co
 
 ## 17. Key Results Summary
 
+The current project includes a completed transient thermal baseline analysis and a completed standalone static structural baseline analysis.
+
+### 17.1 Thermal Analysis Results
+
+The transient thermal analysis was performed using the defined braking heat-flux profile and convection boundary condition.
+
 | Parameter | Result |
-| --- | --- |
-| Vehicle mass + rider | 195 kg |
-| Critical braking speed | 80 km/h |
-| Braking duration | 4 s |
-| Vehicle kinetic energy | 48.15 kJ |
-| Front-brake allocation | 70% |
-| Front-brake energy | 33.70 kJ |
-| Rotor heat partition | 90% |
-| Rotor thermal input | 30.33 kJ |
-| Rotor outer diameter | 240 mm |
-| Rotor total thickness | 12 mm |
-| Ventilation gap | 6 mm |
-| Vane count | 24 |
-| Friction area per face | 0.02757 m² |
-| Average heat flux | 137,500 W/m² |
-| Peak heat flux | 275,000 W/m² |
-| Peak probe temperature | approximately 52 °C |
-| Time of peak | approximately 1.94 s |
-| Maximum temperature at 10 s | 33.117 °C |
-| Maximum temperature at 30 s | 28.161 °C |
-| Maximum temperature at 60 s | 26.512 °C |
-| Final temperature rise above 22 °C | 4.512 °C |
-| Maximum post-processed Total Heat Flux | 2546.6 W/m² |
-| Total simulation duration | 60 s |
+|---|---:|
+| Initial / Ambient Temperature | 22°C |
+| Peak Rotor Temperature | ≈ 52°C |
+| Peak Temperature Time | ≈ 1.94 s |
+| Temperature at 10 s | 33.117°C |
+| Temperature at 30 s | 28.161°C |
+| Temperature at 60 s | 26.512°C |
+| Maximum Total Heat Flux Result | 2546.6 W/m² |
+| Applied Peak Heat Flux per Friction Face | 275,000 W/m² |
+| Applied Average Heat Flux per Friction Face | 137,500 W/m² |
+| Braking Duration | 4 s |
+| Total Rotor Thermal Input | ≈ 30.33 kJ |
+| Average Thermal Power | ≈ 7.58 kW |
 
-## 18. Assumptions and Limitations
+The predicted peak rotor temperature is approximately 52°C, occurring at approximately 1.94 s into the braking event.
 
-The original Phase 1 to Phase 2C design record identifies the following assumptions:
+After the braking heat input ends at 4 s, the rotor temperature decreases continuously due to the applied convection boundary condition.
 
-- Rotor rotation and a physically moving pad heat source are not explicitly modelled.
-- Heat input is circumferentially smeared over the friction track.
-- The 70% front-brake allocation is a preliminary assumption.
-- The 90% rotor heat partition is a preliminary assumption.
-- Convection coefficients in the theoretical model are equivalent baseline parameters and are not CFD-derived.
-- Wheel hub, caliper, brake pads, and detailed thermal contact resistance are not explicitly modelled.
-- Temperature-dependent material properties are future refinements.
-- Temperature-dependent friction behaviour is not included.
-- The project is an engineering simulation case study and is not a certified production brake design.
+The thermal results indicate that the simplified baseline model does not produce an excessive temperature rise under the defined braking case.
 
-For the actual implemented ANSYS baseline, additional simplifications occurred:
+### 17.2 Static Structural Analysis Results
 
-- Internal cooling surfaces were not included.
-- The implemented initial/ambient temperature was 22 °C rather than the original 25 °C design-basis value.
-- Radiation was not included.
-- The hub thermal-sink boundary was not included.
-- The mesh was simplified to obtain a solvable baseline.
+A standalone Static Structural analysis was subsequently performed using the same rotor geometry.
 
-## 19. Future Multiphysics Development
+The structural analysis represents the braking torque mechanically. The thermal temperature field was **not transferred into the structural model**, so these results should be interpreted as a mechanical-only structural baseline.
 
-The current project has completed the first major CAE simulation stage.
+#### Structural Model
 
-### Phase 3B: Thermo-Structural Analysis
+| Parameter | Value |
+|---|---:|
+| Analysis Type | Static Structural |
+| Material | Structural Steel |
+| Mesh Element Size | 9 mm |
+| Mesh Nodes | 114,520 |
+| Mesh Elements | 75,119 |
+| Fixed Support | Six mounting-hole cylindrical faces |
+| Applied Braking Moment | 228 N·m |
+| Moment Axis | Global Z axis |
+| Total Braking Force Equivalent | ≈ 2,303 N |
+| Per-Face Equivalent Force | ≈ 1,152 N |
 
-Transfer the temperature field into a structural model to investigate:
+The six cylindrical mounting-hole faces were fixed to represent the rotor attachment to the wheel/hub assembly.
 
-- Thermal deformation
-- Equivalent stress
-- Thermal stress concentration
-- Rotor distortion
+A braking moment of 228 N·m was applied to the annular friction region of the rotor.
 
-### Phase 4: Static Structural Analysis
+### 17.3 Static Structural Results
 
-Use the derived equivalent tangential braking load to investigate:
+| Result | Maximum Value |
+|---|---:|
+| Total Deformation | 9.1413 × 10⁻⁷ m |
+| Total Deformation | ≈ 0.000914 mm |
+| Equivalent (von-Mises) Stress | 3.1347 × 10⁶ Pa |
+| Equivalent (von-Mises) Stress | ≈ 3.135 MPa |
+| Maximum Principal Stress | 1.9152 × 10⁶ Pa |
+| Maximum Principal Stress | ≈ 1.915 MPa |
+| Minimum Principal Stress | ≈ -2.545 MPa |
+| Equivalent Elastic Strain | ≈ 1.677 × 10⁻⁵ |
 
-- Equivalent stress
-- Total deformation
-- Safety factor
-- Stress concentration
+### 17.4 Structural Interpretation
 
-### Phase 5: Modal Analysis
+The static structural solution produced very small deformation under the applied 228 N·m braking moment.
 
-Investigate:
+The maximum total deformation was approximately:
+
+**9.1413 × 10⁻⁷ m ≈ 0.000914 mm**
+
+The maximum equivalent von-Mises stress was approximately:
+
+**3.135 MPa**
+
+The maximum principal stress was approximately:
+
+**1.915 MPa**
+
+The minimum principal stress was approximately:
+
+**-2.545 MPa**
+
+The maximum equivalent elastic strain was approximately:
+
+**1.677 × 10⁻⁵**
+
+These results indicate that the rotor geometry remains mechanically stiff under the defined baseline braking torque in the standalone static structural model.
+
+### 17.5 Important Coupling Limitation
+
+The current Static Structural analysis is a **standalone mechanical analysis**.
+
+The transient thermal temperature field was not successfully transferred into the Static Structural model. Therefore:
+
+- Thermal expansion is not included.
+- Temperature-dependent material properties are not included.
+- Thermal stress is not included.
+- Thermo-mechanical coupling is not included.
+- The reported structural stresses are mechanical-only baseline results.
+
+Therefore, the structural results should not be described as thermo-structural results.
+
+The completed analyses currently represent:
+
+**Transient Thermal Baseline + Static Structural Baseline**
+
+rather than a fully coupled thermo-structural simulation.
+
+### 17.6 Combined Project Results
+
+| Category | Result | Status |
+|---|---|---|
+| Rotor Geometry | Lightweight ventilated rotor | Completed |
+| Braking Case | 80 km/h to 0 km/h in 4 s | Defined |
+| Total Vehicle + Rider Mass | 195 kg | Defined |
+| Front Brake Distribution | 70% | Defined |
+| Braking Torque | 228 N·m | Defined |
+| Rotor Thermal Input | ≈ 30.33 kJ | Defined |
+| Peak Applied Heat Flux | 275,000 W/m² per face | Defined |
+| Transient Thermal Analysis | Completed baseline | Completed |
+| Peak Thermal Temperature | ≈ 52°C | Completed |
+| Static Structural Analysis | Completed baseline | Completed |
+| Maximum von-Mises Stress | ≈ 3.135 MPa | Completed |
+| Maximum Total Deformation | ≈ 0.000914 mm | Completed |
+| Thermo-Structural Coupling | Temperature field transfer | Not completed |
+| Modal Analysis | Natural frequency evaluation | Planned |
+| Optimization | Weight / thermal / structural optimization | Planned |
+
+### 17.7 Current Engineering Conclusion
+
+The current simulation results provide two independent baseline evaluations of the proposed ventilated brake rotor.
+
+The transient thermal analysis predicts a peak rotor temperature of approximately 52°C under the defined severe braking event, followed by cooling after the 4 s braking period.
+
+The standalone static structural analysis predicts approximately 3.135 MPa maximum equivalent von-Mises stress and approximately 0.000914 mm maximum deformation under the 228 N·m braking moment.
+
+Together, these results provide an initial thermal and mechanical assessment of the rotor design.
+
+However, the structural results do not yet include thermal stresses because the thermal field was not successfully transferred into the Static Structural analysis.
+
+The next major simulation stage is therefore a fully coupled thermo-structural analysis, followed by modal analysis and design optimization.
+
+---
+
+## 18. Project Status
+
+### Completed
+
+- [x] Engineering problem definition
+- [x] Vehicle and braking load calculations
+- [x] Rotor thermal energy calculation
+- [x] Braking torque calculation
+- [x] Rotor geometry development
+- [x] Ventilated rotor concept development
+- [x] SpaceClaim geometry preparation
+- [x] Transient thermal model setup
+- [x] Transient thermal simulation
+- [x] Thermal temperature probe extraction
+- [x] Thermal contour evaluation
+- [x] Static Structural model setup
+- [x] Structural material assignment
+- [x] Structural mesh development
+- [x] Mounting-hole fixed support definition
+- [x] 228 N·m braking moment application
+- [x] Static Structural solution
+- [x] Total deformation evaluation
+- [x] Equivalent von-Mises stress evaluation
+- [x] Principal stress evaluation
+- [x] Equivalent elastic strain evaluation
+
+### In Progress / Remaining
+
+- [ ] Thermo-structural temperature-field transfer
+- [ ] Coupled thermal-stress analysis
+- [ ] Modal analysis
+- [ ] Thermal-structural design optimization
+- [ ] Final design comparison
+- [ ] Final engineering report
+
+---
+
+## 19. Limitations of the Current Analysis
+
+The current results should be interpreted within the scope of the implemented baseline models.
+
+### Thermal Model Limitations
+
+The transient thermal model uses a simplified prescribed heat-flux boundary condition.
+
+The model does not currently include:
+
+- Moving heat-source treatment
+- Explicit rotor rotation
+- Detailed brake pad contact mechanics
+- Full CFD-based airflow analysis
+- Internal ventilation-channel convection
+- Radiation heat transfer
+- Hub thermal sink
+- Temperature-dependent material properties
+- Detailed contact resistance between components
+
+The model is therefore intended as a baseline transient thermal assessment rather than a complete brake-system thermal simulation.
+
+### Structural Model Limitations
+
+The Static Structural model is a standalone mechanical analysis.
+
+It does not currently include:
+
+- Thermal expansion
+- Temperature-dependent elastic properties
+- Thermally induced stress
+- Fully coupled thermo-mechanical loading
+- Detailed pad pressure distribution
+- Contact nonlinearities
+- Bolt preload
+- Hub deformation
+- Wheel-hub interface compliance
+- Fatigue loading
+- Rotational dynamics
+
+The structural results should therefore be treated as baseline mechanical results.
+
+---
+
+## 20. Future Multiphysics Development
+
+The next stage of the project is to develop a more complete multiphysics workflow.
+
+### 20.1 Thermo-Structural Coupling
+
+The transient temperature field will be transferred to the structural model to evaluate:
+
+- Thermal expansion
+- Thermal stress
+- Combined mechanical and thermal stress
+- Temperature-dependent material response
+- Thermally induced deformation
+
+The objective is to determine the combined structural response of the rotor under simultaneous braking torque and thermal loading.
+
+### 20.2 Modal Analysis
+
+A modal analysis will be performed to determine:
 
 - Natural frequencies
 - Mode shapes
-- Vibration behaviour
-- Potential resonance regions
+- Potential vibration-sensitive modes
+- Structural dynamic characteristics
 
-### Phase 6: Design Optimization
+The modal results can subsequently be compared against expected excitation sources associated with rotor rotation and braking.
 
-The initial optimization variables are:
+### 20.3 Design Optimization
 
-- Friction plate thickness
-- Ventilation gap
+Future optimization will investigate the influence of:
+
+- Rotor thickness
+- Vane geometry
 - Vane count
+- Ventilation gap
+- Friction-track dimensions
+- Mounting-hole configuration
+- Rotor mass
+- Thermal response
+- Structural stiffness
 
-Potential optimization objectives include:
+The optimization objective will be to reduce mass while maintaining acceptable thermal and structural performance.
 
-- Minimizing mass
-- Reducing peak temperature
-- Reducing thermal stress
-- Maintaining structural stiffness
-- Improving dynamic behaviour
+---
 
-## 20. Repository Structure
+## 21. Engineering Significance
 
-```text
-Lightweight-Ventilated-Brake-Rotor-Multiphysics-Analysis/
-|
-|-- README.md
-|
-|-- 01_Engineering_Design_Basis/
-|   |-- Phase1_to_Phase2C_Engineering_Record.pdf
-|   |-- Design_Calculations/
-|
-|-- 02_CAD_Geometry/
-|   |-- Geometry_Files/
-|   |-- Geometry_Images/
-|
-|-- 03_ANSYS_Transient_Thermal/
-|   |-- ANSYS_Project/
-|   |-- Mesh/
-|   |-- Boundary_Conditions/
-|   |-- Results/
-|   |   |-- Temperature_10s.png
-|   |   |-- Temperature_30s.png
-|   |   |-- Temperature_60s.png
-|   |   |-- Total_Heat_Flux.png
-|   |   |-- Temperature_Probe.png
-|   |
-|   |-- Data/
-|       |-- Temperature_Probe_Data.csv
-|
-|-- 04_Project_Documentation/
-|   |-- Project_Report.pdf
-|
-|-- Images/
-    |-- Geometry.png
-    |-- Mesh.png
-    |-- Friction_Surface.png
-    |-- Heat_Flux.png
-    |-- Convection.png
-```
+This project demonstrates a structured CAE workflow for evaluating a lightweight ventilated brake rotor for an electric-vehicle application.
 
-## 21. Software Used
+The current work combines:
 
-- ANSYS Workbench 2026 R1
-- ANSYS SpaceClaim
-- ANSYS Mechanical
-- GitHub
+- Engineering load calculations
+- Brake-energy estimation
+- Heat-transfer calculations
+- CAD development
+- Transient thermal simulation
+- Static structural simulation
+- Stress and deformation evaluation
+- CAE result interpretation
 
-## 22. Project Status
+The analysis also demonstrates the importance of distinguishing between independent physics simulations and genuinely coupled multiphysics simulations.
 
-| Phase | Status |
-| --- | --- |
-| Phase 1: Engineering Design Basis | Completed |
-| Phase 2A: Material Selection | Completed |
-| Phase 2A: Preliminary Geometry | Completed |
-| Phase 2B: Heat-Flux Derivation | Completed |
-| Phase 2C: Thermal Boundary Conditions | Completed |
-| Phase 3A: CAD Development | Completed |
-| Phase 3A: Transient Thermal Analysis | Completed |
-| Phase 3B: Thermo-Structural Analysis | Planned |
-| Phase 4: Static Structural Analysis | Planned |
-| Phase 5: Modal Analysis | Planned |
-| Phase 6: Design Optimization | Planned |
+The present results establish a baseline from which thermo-structural coupling, modal analysis, and optimization can be developed.
 
-## Author
+---
 
-**Pavan Kumar Karisanapu**
+## 22. Reproducibility
 
-Mechanical Engineering | CAE | FEA | CFD | Thermal Analysis | Engineering Research
+The project calculations and simulation assumptions are documented so that the analysis can be reproduced and further developed.
 
-GitHub: [Pavankreative](https://github.com/Pavankreative)
+### Primary Design Inputs
 
-## Final Statement
+- Vehicle mass = 120 kg
+- Rider mass = 75 kg
+- Total mass = 195 kg
+- Initial speed = 80 km/h
+- Final speed = 0 km/h
+- Braking duration = 4 s
+- Wheel radius = 0.30 m
+- Front braking distribution = 70%
+- Rotor heat partition = 90%
+- Effective friction radius ≈ 0.099 m
+- Braking torque ≈ 228 N·m
 
-This repository documents the complete engineering development of a lightweight ventilated brake rotor concept, beginning with vehicle braking physics and analytical energy calculations, progressing through material-selection strategy and ventilated rotor geometry, and culminating in a successfully solved transient thermal simulation.
+### Thermal Inputs
 
-The analytical design basis predicts a modelled rotor heat input of:
+- Initial temperature = 22°C
+- Ambient temperature = 22°C
+- Peak heat flux per friction face = 275,000 W/m²
+- Heat input duration = 4 s
+- Convection-based cooling after braking
 
-$$
-\boxed{30.33 \text{ kJ}}
-$$
+### Structural Inputs
 
-during an emergency braking event from:
+- Material = Structural Steel
+- Braking moment = 228 N·m
+- Fixed support = six mounting-hole cylindrical faces
+- Mesh size = 9 mm
+- Nodes = 114,520
+- Elements = 75,119
 
-$$
-\boxed{80 \text{ km/h} \rightarrow 0 \text{ km/h in } 4 \text{ s}}
-$$
+---
 
-The corresponding energy-consistent peak heat flux is:
+## 23. Final Statement
 
-$$
-\boxed{275,000 \text{ W/m}^2}
-$$
+This repository documents the development and baseline CAE evaluation of a lightweight ventilated brake rotor intended for electric-vehicle applications.
 
-per friction surface.
+The current project has progressed beyond the initial design stage and includes both transient thermal and static structural simulation results.
 
-The completed ANSYS transient model captured a local thermal peak of approximately:
+The transient thermal analysis produced a peak rotor temperature of approximately 52°C for the defined braking event.
 
-$$
-\boxed{52^\circ C}
-$$
+The standalone static structural analysis produced a maximum equivalent von-Mises stress of approximately 3.135 MPa and a maximum total deformation of approximately 0.000914 mm under the defined 228 N·m braking moment.
 
-at approximately:
+These results provide an initial assessment of the rotor's thermal and mechanical response.
 
-$$
-\boxed{1.94 \text{ s}}
-$$
+The current structural analysis is intentionally reported as a standalone mechanical baseline because the thermal temperature field has not yet been successfully transferred into the structural model.
 
-followed by progressive cooling to:
+Future development will focus on completing the thermo-structural coupling, followed by modal analysis and design optimization.
 
-$$
-\boxed{26.512^\circ C}
-$$
-
-at the end of the 60-second simulation.
-
-This completed thermal baseline forms the foundation for the remaining multiphysics stages: thermo-structural analysis, static structural analysis, modal analysis, and design optimization.
+The overall objective is to establish a reproducible CAE workflow for the design, simulation, evaluation, and optimization of lightweight ventilated brake rotors for electric-vehicle applications.
